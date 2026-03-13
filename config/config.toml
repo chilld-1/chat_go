@@ -1,0 +1,18 @@
+[common-etcd]
+host = "127.0.0.1:2379"
+basePath = "/gochat_srv"
+serverPathLogic = "LogicRpc"
+serverPathConnect = "ConnectRpc"
+userName = ""
+password = ""
+connectionTimeout = 5
+
+[common-redis]
+redisAddress = "127.0.0.1:6379"
+redisPassword = ""
+db = 0
+[common-rabbitmq]
+url = "amqp://guest:guest@localhost:5672/"
+queueName = "gochat-messages"
+[common-mysql]
+dsn = "root:123456@tcp(localhost:3306)/gochatremake?charset=utf8mb4&parseTime=True&loc=Local"

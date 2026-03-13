@@ -1,0 +1,18 @@
+# 每日任务文档
+/gochatremake/
+/第三天ex.md
+/第四天ex.md
+
+# 编译产物
+/gochat.bin
+/gochat.exe
+
+# IDE 配置
+/.idea/
+
+# 测试文件
+/tcp_client.go
+/ws_client.go
+
+# 其他
+/todo.txt
