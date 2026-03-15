@@ -2,6 +2,7 @@ package router
 
 import (
 	"gochat/api/handler"
+	"gochat/api/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,6 +27,26 @@ func SetupRouter() *gin.Engine {
 		{
 			user.POST("/login", handler.Login)
 			user.POST("/register", handler.Register)
+		}
+		session := api.Group("/session")
+		{
+			session.Use(middleware.AuthMiddleware())
+			session.POST("/set", handler.SetSession)
+			session.GET("/get", handler.GetSession)
+			session.DELETE("/delete", handler.DeleteSession)
+		}
+
+		unread := api.Group("/unread")
+		{
+			unread.Use(middleware.AuthMiddleware())
+			unread.GET("/count", handler.GetUnreadCount)
+			unread.POST("/reset", handler.ResetUnreadCount)
+		}
+
+		messages := api.Group("/messages")
+		{
+			messages.Use(middleware.AuthMiddleware())
+			messages.GET("/recent", handler.GetRecentMessagesHandler)
 		}
 	}
 

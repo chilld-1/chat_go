@@ -23,12 +23,18 @@ func WebSocketHandler(c *gin.Context) {
 	if !tools.TokenCheck(c, token) {
 		return
 	}
+	userID := c.GetString("user_id")
+
+	// 更新用户在线状态
+	UpdataUserOnlineStatus(userID)
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		return
 	}
 	ch := NewChannel(conn, token)
 	AddChannel(ch)
+	go StartNotificationListener(userID, ch)
+	defer UpdateUserOfflineStatus(userID)
 	ch.ReadPump()
 
 }
