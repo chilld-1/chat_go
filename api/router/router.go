@@ -28,6 +28,11 @@ func SetupRouter() *gin.Engine {
 			user.POST("/login", handler.Login)
 			user.POST("/register", handler.Register)
 		}
+		usergrpc := api.Group("/usergrpc")
+		{
+			usergrpc.POST("/login", handler.Logingrpc)
+			usergrpc.POST("/register", handler.Registergrpc)
+		}
 		session := api.Group("/session")
 		{
 			session.Use(middleware.AuthMiddleware())

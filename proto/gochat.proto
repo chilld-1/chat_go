@@ -1,0 +1,56 @@
+syntax = "proto3";
+package gochat;
+option go_package= "./proto";
+
+message LoginRequest{
+    string username =1;
+    string password =2;
+}
+message LoginResponse {
+  string token = 1;
+  string username = 2;
+  string error = 3;
+}
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+message RegisterResponse {
+  string token = 1;
+  string username = 2;
+  string error = 3;
+}
+
+message PushMessageRequest {
+  string message = 1;
+}
+message PushMessageResponse {
+  string error = 1;
+}
+
+message BroadcastRequest {
+  string message = 1;
+}
+message BroadcastResponse {
+  string error = 1;
+}
+
+message PushPrivateMessageRequest {
+  string user_id = 1;
+  string message = 2;
+}
+message PushPrivateMessageResponse {
+  string error = 1;
+}
+
+service LogicService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc PushMessage(PushMessageRequest) returns (PushMessageResponse);
+}
+
+service ConnectService {
+  rpc Broadcast(BroadcastRequest) returns (BroadcastResponse);
+  rpc PushPrivateMessage(PushPrivateMessageRequest) returns (PushPrivateMessageResponse);
+}

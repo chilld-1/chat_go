@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"gochat/api/grpc"
 	"gochat/logic/dao"
 	"gochat/model"
 	"gochat/tools"
@@ -79,5 +80,51 @@ func Register(c *gin.Context) {
 	tools.SuccessResponse(c, gin.H{
 		"token":    token,
 		"username": user.Username,
+	})
+}
+func Logingrpc(c *gin.Context) {
+	var req LoginReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		tools.BadRequestResponse(c, err.Error())
+		return
+	}
+	reply, err := grpc.Login(req.Username, req.Password)
+	if err != nil {
+		tools.InternalServerErrorResponse(c, "登录失败")
+		return
+	}
+
+	if reply.Error != "" {
+		tools.UnauthorizedResponse(c, reply.Error)
+		return
+	}
+
+	tools.SuccessResponse(c, gin.H{
+		"token":    reply.Token,
+		"username": reply.Username,
+	})
+}
+func Registergrpc(c *gin.Context) {
+	var req RegisterReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		tools.BadRequestResponse(c, "参数错误")
+		return
+	}
+
+	// 调用 gRPC 注册
+	reply, err := grpc.Register(req.Username, req.Password)
+	if err != nil {
+		tools.InternalServerErrorResponse(c, "注册失败")
+		return
+	}
+
+	if reply.Error != "" {
+		tools.BadRequestResponse(c, reply.Error)
+		return
+	}
+
+	tools.SuccessResponse(c, gin.H{
+		"token":    reply.Token,
+		"username": reply.Username,
 	})
 }

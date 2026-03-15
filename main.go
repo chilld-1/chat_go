@@ -7,6 +7,7 @@ import (
 	"gochat/config"
 	"gochat/connect"
 	"gochat/db"
+	"gochat/logic"
 	"gochat/tools"
 )
 
@@ -55,6 +56,15 @@ func main() {
 		connect.New().Run_websocket()
 	case "connect_tcp":
 		connect.New().RunTcp()
+	case "connect_websocket_grpc":
+		connect.New().RungrpcWebsocket()
+	case "connect_tcp_grpc":
+		connect.New().RungrpcTcp()
+	case "logic":
+		if err := logic.StartGrpcServer(); err != nil {
+			fmt.Printf("启动 gRPC 服务失败: %v\n", err)
+			return
+		}
 	default:
 		fmt.Println("未知模块")
 	}
